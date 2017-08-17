@@ -42,6 +42,7 @@ var control = {
 	//choose random number between 0 and 3 and add the item from 
 	//grid array to the matchSequence array
 	computerMove: function() {
+		view.allowFlash(false);
 		var x = Math.floor(Math.random() * 4);
 		var move = model.grid[x];
 		var arrayvar = model.matchSequence;
@@ -52,6 +53,7 @@ var control = {
 
 		control.setState('matchSequence', arrayvar);
 		control.setState('playerTurn', true);
+		view.allowFlash(true);
 	},
 
 	loopThroughMoves: function(arr) {
@@ -79,10 +81,15 @@ var control = {
 		if (matchSoFar !== lastMove) {
 			control.playerMistake();
 			view.updateCounter();
-		}
+		} 
+
+		//check for end game
+		else if (model.matchSequence.length === 4 && model.matchSequence.length === n && matchSoFar === lastMove) {
+			control.endgame();
+		} 
 
 		//player has successfully matched the entire matchSequence
-		if (model.matchSequence.length === n && matchSoFar === lastMove) {
+		else if (model.matchSequence.length === n && matchSoFar === lastMove) {
 			control.playerSuccess();
 			setTimeout(function() {
 				return control.computerMove();
@@ -94,14 +101,33 @@ var control = {
 		//the round
 	},
 
+	endgame: function() {
+		view.showModal('end');
+		control.setState('round', 1);
+		control.setState('playerTurn', false);
+		control.setState('matchSequence', []);
+		control.setState('playerSequence', []);
+		view.updateCounter();
+		view.allowFlash(false);
+		setTimeout(function() {
+				view.allowFlash(true);
+				view.showModal();
+				control.init();
+		}, 2000);
+	},
+
 	//reset to initial state
 	playerMistake: function() {
+		view.showModal('oops!');
 		control.setState('round', 1);
 		control.setState('playerTurn', false);
 		control.setState('matchSequence', []);
 		control.setState('playerSequence', []);
 		setTimeout(function() {
 			return control.init();
+		}, 1000);
+		setTimeout(function() {
+			return view.showModal();
 		}, 1000);
 	},
 
@@ -123,29 +149,29 @@ var control = {
 
 	//power off, reset all states
 	powerDown: function() {
-		console.log(model.round);
 		control.setState('round', 0);
-		console.log(model.round);
 		control.setState('matchSequence', []);
-		console.log(model.matchSequence);
 		control.setState('playerSequence', []);
 		control.setState('power', false);
+		view.allowFlash(false);
 		view.updateCounter();
 	},
 
 	//power on and begin init
 	powerUp: function() {
-		console.log(model);
 		control.setState('matchSequence', []);
 		control.setState('round', 1);
 		control.setState('power', true);
-		console.log(model);
+		view.allowFlash(true);
 		setTimeout(function() {
 			return control.init();
 		}, 1000);
+
 	},
 
-	handleGridClick: function(color) {
+	handleGridClick: function(e) {
+		e.preventDefault();
+		var color = this.id;
 		control.updatePlayerSequence(color);
 		view.flashGrid(color);
 	},
@@ -166,30 +192,15 @@ var control = {
 	}
 };
 
+var red = document.getElementById('red');
+var blue = document.getElementById('blue');
+var green = document.getElementById('green');
+var yellow = document.getElementById('yellow');
+
 var view = {
+
 	render: function() {
-		var red = document.getElementById('red');
-		var blue = document.getElementById('blue');
-		var green = document.getElementById('green');
-		var yellow = document.getElementById('yellow');
-
-		red.addEventListener('click', function(e) {
-			e.preventDefault();
-			control.handleGridClick('red')
-		});
-		blue.addEventListener('click', function(e) {
-			e.preventDefault();
-			control.handleGridClick('blue')
-		});
-		green.addEventListener('click', function(e) {
-			e.preventDefault();
-			control.handleGridClick('green')
-		});
-		yellow.addEventListener('click', function(e) {
-			e.preventDefault();
-			control.handleGridClick('yellow')
-		});
-
+		
 		var power = document.getElementById('power');
 		power.addEventListener('mousedown', function(e) {
 			e.preventDefault();
@@ -205,6 +216,20 @@ var view = {
 		});
 
 		view.updateCounter();
+	},
+
+	allowFlash: function(x) {
+		if (x === true) {
+			red.addEventListener('click', control.handleGridClick, true);
+			blue.addEventListener('click', control.handleGridClick, true);
+			green.addEventListener('click', control.handleGridClick, true);
+			yellow.addEventListener('click', control.handleGridClick, true);
+		} else if (x === false) {
+			red.removeEventListener('click', control.handleGridClick, true);
+			blue.removeEventListener('click', control.handleGridClick, true);
+			green.removeEventListener('click', control.handleGridClick, true);
+			yellow.removeEventListener('click', control.handleGridClick, true);
+		}
 	},
 
 	powerUpCounter: function() {
@@ -227,6 +252,12 @@ var view = {
 		var grid = document.getElementById(color);
 		grid.classList.add('flash');
 		setTimeout(function(){grid.classList.remove('flash')},500);
+	},
+
+	showModal: function(msg) {
+		var modal = document.getElementById('modal');
+		modal.classList.toggle('hidden');
+		modal.innerHTML = msg;
 	}
 
 };

@@ -35,19 +35,19 @@ body {
 }
 
 .red {
-	background: #f44336;
+	background: #F44336;
 }
 
 .blue {
-	background: #3f50b5;
+	background: #2196F3;
 }
 
 .yellow {
-	background: #ffeb3b;
+	background: #f39c12;
 }
 
 .green {
-	background: #4caf50;
+	background: #4CAF50;
 }
 
 .controls {
@@ -58,7 +58,7 @@ body {
 	border-radius: 100%;
 	left: calc(50vw - 210px);
 	text-align: center;
-	background: #b0bec5;
+	background: #bdc3c7;
 	z-index: 1;
 	font-size: 3em;
 }
@@ -196,6 +196,24 @@ input:checked + .slider:before {
 
 .slider.round:before {
   border-radius: 50%;
+}
+
+.modal {
+	position: absolute;
+	top: calc(50vh - 210px);
+	border-radius: 100%;
+	left: calc(50vw - 210px);
+	text-align: center;
+	background-color: #ffffff;
+	z-index: 4;
+	width: 420px;
+	height: 420px;
+	line-height: 420px;
+	font-size: 48px;
+}
+
+.hidden {
+	display: none;
 }
 
 .flash {

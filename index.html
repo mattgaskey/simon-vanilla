@@ -7,6 +7,7 @@
 		<meta name="description" content="A Simon game in the browser">
 		<meta name="author" content="Matt Gaskey">
 		<link rel='stylesheet' href='src/index.css'>
+		<link rel='icon' type='favicon/ico' href='favicon.ico'>
 	</head>
 	<body>
 		<div id="app" class="container">
@@ -21,8 +22,8 @@
 						<div class="counter-bg">88</div>
 						<div class="counter counter-faded" id='counter'></div>
 						<div class="label-off">OFF</div>
-						<div class="power" id='power'>
-							<label class="switch">
+						<div class="power">
+							<label class="switch" id='power'>
 								<input type="checkbox" value="on">
 								<span class="slider round"></span>
 							</label>
@@ -30,6 +31,7 @@
 						<div class="label-on">ON</div>
 					</div>
 				</div>
+				<div class='modal hidden' id='modal'></div>
 			</div>
 		</div>
 		<script type='text/javascript' src='src/index.js'></script>
