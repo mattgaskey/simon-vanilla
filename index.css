@@ -1,0 +1,210 @@
+@font-face {
+	font-family: 'Digital Mono';
+	src: url('src/digital-7.mono.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: system;
+  font-style: normal;
+  font-weight: 300;
+  src: local(".SFNSText-Light"), local(".HelveticaNeueDeskInterface-Light"), local(".LucidaGrandeUI"), local("Ubuntu Light"), local("Segoe UI Light"), local("Roboto-Light"), local("DroidSans"), local("Tahoma");
+}
+
+body {
+	min-height: 100vh;
+	margin: 0;
+	font-family: 'system';
+}
+
+.container {
+	position: relative;
+	width: 100vw;
+	height: 100vh;
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	margin: 0;
+}
+
+.grid-block {
+	width: 50vw;
+	height: 50vh;
+	margin: 0;
+	flex: 1 1 auto;
+	cursor: pointer;
+}
+
+.red {
+	background: #f44336;
+}
+
+.blue {
+	background: #3f50b5;
+}
+
+.yellow {
+	background: #ffeb3b;
+}
+
+.green {
+	background: #4caf50;
+}
+
+.controls {
+	width: 420px;
+	height: 420px;
+	position: absolute;
+	top: calc(50vh - 210px);
+	border-radius: 100%;
+	left: calc(50vw - 210px);
+	text-align: center;
+	background: #b0bec5;
+	z-index: 1;
+	font-size: 3em;
+}
+
+.controls-relative-container {
+	position: relative;
+	width: 100%;
+	height: 100%;
+	border-radius: 100%;
+}
+
+.simon {
+	position: absolute;
+	top: calc(50% - .75em);
+	width: 100%;
+	text-align: center;
+}
+
+.counter-bg {
+	position: absolute;
+	height: 64px;
+	width: 60px;
+	color: #222;
+	background-color: #000000;
+	border-radius: 1px;
+	top: 40px;
+	left: calc(50% - 35px);
+	line-height: 72px;
+	text-align: right;
+	padding-right: 5px;
+	font-family: 'Digital Mono';
+	font-size: 60px;
+	z-index: 2;
+}
+
+.counter {
+	position: absolute;
+	height: 64px;
+	width: 60px;
+	color: red;
+	top: 40px;
+	left: calc(50% - 35px);
+	line-height: 72px;
+	text-align: right;
+	padding-right: 5px;
+	font-family: 'Digital Mono';
+	font-size: 60px;
+	z-index: 3;
+	transition: .4s;
+}
+
+.counter-faded {
+	color: #222;
+	transition: .4s;
+}
+
+.power {
+	position: absolute;
+	height: 48px;
+	width: 72px;
+	bottom: 50px;
+	left: calc(50% - 32px);
+	cursor: pointer;
+}
+
+.label-off {
+	position: absolute;
+	bottom: 50px;
+	font-size: 32px;
+	left: calc(50% - 102px);
+}
+
+.label-on {
+	position: absolute;
+	bottom: 50px;
+	font-size: 32px;
+	right: calc(50% - 102px);
+}
+
+/* Power button */
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+
+.switch input {
+	display:none;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: #2196F3;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
+.flash {
+	animation-name: flash;
+	animation-duration: 500ms;
+}
+
+@keyframes flash {
+	0%		{opacity: 1;}
+	50%		{opacity: .5;}
+	100%	{opacity: 1;}
+}
