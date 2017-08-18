@@ -38,7 +38,7 @@ var control = {
 			//check game status after every click
 			setTimeout(function() {
 				return control.checkPlayerMove();
-			}, 500);
+			}, 100);
 		}
 	},
 
@@ -102,7 +102,7 @@ var control = {
 			control.playerSuccess();
 			setTimeout(function() {
 				return control.computerMove();
-			}, 100);
+			}, 500);
 		}	
 
 		//becuase player moves are checked after each addition, 
