@@ -93,7 +93,7 @@ var control = {
 		} 
 
 		//check for end game
-		else if (model.matchSequence.length === 4 && model.matchSequence.length === n && matchSoFar === lastMove) {
+		else if (model.matchSequence.length === 10 && model.matchSequence.length === n && matchSoFar === lastMove) {
 			control.endgame();
 		} 
 
