@@ -322,10 +322,10 @@ input:checked + .slider:before {
 		bottom: 20px;
 	}
 	.label-off {
-		left: 140px;
+		left: calc(50% - 90px);
 	}
 	.label-on {
-		right: 140px;
+		right: calc(50% - 90px);
 	}
 	.power {
 		bottom: 0;
