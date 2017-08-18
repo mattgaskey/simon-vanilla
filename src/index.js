@@ -13,7 +13,9 @@ var model = {
 	//turn status handler, keeps user clicks in check
 	playerTurn: false,
 	//strict mode
-	strict: false
+	strict: false,
+	//volume mode
+	volume: true
 };
 
 var control = {
@@ -93,7 +95,7 @@ var control = {
 		} 
 
 		//check for end game
-		else if (model.matchSequence.length === 10 && model.matchSequence.length === n && matchSoFar === lastMove) {
+		else if (model.matchSequence.length === 20 && model.matchSequence.length === n && matchSoFar === lastMove) {
 			control.endgame();
 		} 
 
@@ -113,6 +115,9 @@ var control = {
 	//player wins, show msg and restart the game
 	endgame: function() {
 		var msg = control.random(view.success);
+		setTimeout(function() {
+			return view.playAudio('success')
+		}, 500);
 		view.showModal(msg);
 		control.setState('round', 1);
 		control.setState('playerTurn', false);
@@ -135,6 +140,7 @@ var control = {
 		//if strict reset game entirely
 		if (strict === true) {
 			view.showModal(strictMsg);
+			view.playAudio('hard_fail');
 			control.setState('round', 1);
 			control.setState('playerTurn', false);
 			control.setState('matchSequence', []);
@@ -148,6 +154,7 @@ var control = {
 		//if not strict, reset round only
 		} else if (strict === false) {
 			view.showModal(nonStrictMsg);
+			view.playAudio('soft_fail');
 			control.setState('playerTurn', false);
 			control.setState('playerSequence', []);
 			setTimeout(function() {
@@ -238,6 +245,12 @@ var control = {
 		control.handleReset();
 	},
 
+	//click handler for volume mode toggle
+	volumeModeToggle: function() {
+		var x = model.volume;
+		control.setState('volume', !x);
+	},
+
 	//game start
 	start: function() {
 		view.render();
@@ -254,16 +267,20 @@ var view = {
 		var power = document.getElementById('power');
 		var reset = document.getElementById('reset');
 		var strict = document.getElementById('strict');
-		var strict_led = document.getElementById('strict_led');
+		var volume_on = document.getElementById('volume_on');
+		var volume_off = document.getElementById('volume_off');
+
 		power.addEventListener('mousedown', view.handlePower, true);
-		view.updateCounter();
 		reset.addEventListener('click', view.reset, true);
 		strict.addEventListener('click', view.strictToggle, true);
+		volume_on.addEventListener('click', view.volumeToggle, true);
+		volume_off.addEventListener('click', view.volumeToggle, true);
 	},
 
 	//local click handler for power button
 	handlePower: function(e) {
 		e.preventDefault();
+		view.updateCounter();
 		control.handlePowerButton();
 		//flash the game board on power up/down
 		grids.forEach(function(grid, i) {
@@ -291,6 +308,22 @@ var view = {
 		setTimeout(function(){self.classList.remove('press')},500);
 
 		control.handleReset();
+	},
+
+	//local click handler for volume control
+	volumeToggle: function(e) {
+		e.preventDefault();
+		var volume = control.getState('volume');
+		if (volume === true) {
+			var volume_off = document.getElementById('volume_off');
+			this.classList.add('hidden');
+			volume_off.classList.remove('hidden');
+		} else if (volume === false) {
+			var volume_on = document.getElementById('volume_on');
+			this.classList.add('hidden');
+			volume_on.classList.remove('hidden');
+		}
+		control.volumeModeToggle();
 	},
 
 	//local handler for strict button
@@ -334,8 +367,10 @@ var view = {
 	//flash a grid area
 	flashGrid: function(color) {
 		var grid = document.getElementById(color);
+		var sound = control.getState('volume');
 		grid.classList.add('flash');
 		setTimeout(function(){grid.classList.remove('flash')},500);
+		view.playAudio(color);
 	},
 
 	//show the modal window with error or success message
@@ -343,6 +378,15 @@ var view = {
 		var modal = document.getElementById('modal');
 		modal.classList.toggle('hidden');
 		modal.innerHTML = msg;
+	},
+
+	//play audio with grid area flash
+	playAudio: function(color) {
+		var audio = new Audio('src/' + color + '.wav');
+		var volume = control.getState('volume');
+		if (volume === true) {
+			audio.play();
+		}
 	},
 
 	softErrors: ['Oops! Not quite', 'Just a bit off', 'Try again!', 'Almost there'],

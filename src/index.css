@@ -133,6 +133,15 @@ body {
 	font-size: 18px;
 }
 
+.volume-on, .volume-off {
+	height: 40px;
+	width: 40px;
+	position: absolute;
+	top: 230px;
+	left: 190px;
+	cursor: pointer;
+}
+
 .strict-mode-led-bg, .strict-mode-led {
 	position: absolute;
 	top: 210px;
