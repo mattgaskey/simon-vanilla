@@ -257,9 +257,6 @@ var control = {
 	}
 };
 
-//global var for grid areas
-var grids = document.querySelectorAll('.grid-block');
-
 var view = {
 
 	//initialize the game board
@@ -283,21 +280,39 @@ var view = {
 		view.updateCounter();
 		control.handlePowerButton();
 		//flash the game board on power up/down
-		grids.forEach(function(grid, i) {
-			grid.classList.add('flash');
-			setTimeout(function(){grid.classList.remove('flash')},800);
-		});
+		//forEach on nodeList only for modern browsers
+		// grids.forEach(function(grid, i) {
+		// 	grid.classList.add('flash');
+		// 	setTimeout(function(){grid.classList.remove('flash')},800);
+		// });
+		var grids = document.querySelectorAll('.grid-block');
+		for (var i = 0; i < grids.length; i++) {
+			(function(ind) {
+				grids[ind].classList.add('flash');
+				setTimeout(function() {grids[ind].classList.remove('flash')},800);
+			})(i);
+		}
 	},
 
 	//turn flash on click on/off
 	allowFlash: function(x) {
-		grids.forEach(function(grid, i) {
+		//forEach on nodeList only for modern browsers
+		// grids.forEach(function(grid, i) {
+		// 	if (x === true) {
+		// 		grid.addEventListener('click', control.handleGridClick, true);
+		// 	} else if (x === false) {
+		// 		grid.removeEventListener('click', control.handleGridClick, true);
+		// 	}
+		// });
+		var grids = document.querySelectorAll('.grid-block');
+
+		for (var i = 0; i < grids.length; i++) {
 			if (x === true) {
-				grid.addEventListener('click', control.handleGridClick, true);
+				grids[i].addEventListener('click', control.handleGridClick, true);
 			} else if (x === false) {
-				grid.removeEventListener('click', control.handleGridClick, true);
+				grids[i].removeEventListener('click', control.handleGridClick, true);
 			}
-		});
+		}
 	},
 
 	//local handler for reset button
@@ -382,7 +397,7 @@ var view = {
 
 	//play audio with grid area flash
 	playAudio: function(color) {
-		var audio = new Audio('src/' + color + '.wav');
+		var audio = new Audio('src/audio/' + color + '.wav');
 		var volume = control.getState('volume');
 		if (volume === true) {
 			audio.play();
