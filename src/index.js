@@ -229,13 +229,16 @@ var control = {
 
 	//click handler for reset button
 	handleReset: function() {
-		control.setState('round', 1);
-		control.setState('playerTurn', false);
-		control.setState('matchSequence', []);
-		control.setState('playerSequence', []);
-		setTimeout(function() {
-			return control.init();
-		}, 1000);
+		var power = model.power;
+		if (power === true) {
+			control.setState('round', 1);
+			control.setState('playerTurn', false);
+			control.setState('matchSequence', []);
+			control.setState('playerSequence', []);
+			setTimeout(function() {
+				return control.init();
+			}, 1000);
+		}
 	},
 
 	//click handler for strict mode toggle
@@ -319,10 +322,13 @@ var view = {
 	reset: function(e) {
 		e.preventDefault();
 		var self = this;
-		self.classList.add('press');
-		setTimeout(function(){self.classList.remove('press')},500);
+		var power = control.getState('power');
+		if (power === true) {
+			self.classList.add('press');
+			setTimeout(function(){self.classList.remove('press')},500);
 
-		control.handleReset();
+			control.handleReset();
+		}
 	},
 
 	//local click handler for volume control
@@ -344,20 +350,23 @@ var view = {
 	//local handler for strict button
 	strictToggle: function(e) {
 		e.preventDefault();
+		var power = control.getState('power');
 		var self = this;
 		var strict_led = document.getElementById('strict_led');
 		var strict_mode = control.getState('strict');
 
-		self.classList.add('press');
-		setTimeout(function(){self.classList.remove('press')},500);
+		if (power === true) {
+			self.classList.add('press');
+			setTimeout(function(){self.classList.remove('press')},500);
 
-		if (strict_mode === false) {
-			strict_led.classList.remove('hidden');
-		} else if (strict_mode === true) {
-			strict_led.classList.add('hidden');
+			if (strict_mode === false) {
+				strict_led.classList.remove('hidden');
+			} else if (strict_mode === true) {
+				strict_led.classList.add('hidden');
+			}
+
+			control.strictModeToggle();
 		}
-
-		control.strictModeToggle();
 	},
 
 	//turn on the red counter
