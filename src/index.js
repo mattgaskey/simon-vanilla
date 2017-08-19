@@ -15,7 +15,7 @@ var model = {
 	//strict mode
 	strict: false,
 	//volume mode
-	volume: true
+	volume: false
 };
 
 var control = {
